@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main_content %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+   <div class="container">
+      <div class="row">
+         <div class="col-lg-12 text-center">
+            <div class="breadcrumb__text">
+               <h2>Vegbag</h2>
+               <div class="breadcrumb__option">
+                  <a href="{% url 'index' %}">Home</a>
+                  <span>Shop</span>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Product Section Begin -->
+<section class="product spad">
+   <div class="container">
+   <div class="row">
+   <div class="col-lg-3 col-md-5">
+   <div class="sidebar">
+      <div class="sidebar__item">
+      {% if request.user.is_authenticated %}
+          {% if perms.product.add_product %}
+               <a href="{% url 'add_product' %}" class="btn btn-outline-success ml-2" >Add Product</a>
+              {% endif %}
+      {% endif %}
+
+         <h4>Category</h4>
+         <ul>
+            {% for category in categories %}
+            <li><a href="{% url 'products_by_category' category=category %}">{{ category }}</a></li>
+            {% endfor %}
+         </ul>
+      </div>
+      <div class="sidebar__item">
+         <h4>Latest Products</h4>
+         <div class="latest-product__text">
+            <div class="latest-product__slider owl-carousel">
+               {% for product in latest_products %}
+               <div class="latest-prdouct__slider__item">
+                  <a href="{% url 'shop_details' id=product.id %}" class="latest-product__item">
+                     <div class="latest-product__item__pic">
+                        <img src="{{ product.product_image }}" alt="">
+                     </div>
+                     <div class="latest-product__item__text">
+                        <h6>{{ product.name }}</h6>
+                        <span>${{ product.price }}</span>
+                     </div>
+                  </a>
+               </div>
+               {% endfor %}
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+   <div class="col-lg-9 col-md-7">
+      <div class="product__discount">
+         <div class="section-title product__discount__title">
+            <h2>Sale Off</h2>
+         </div>
+         <div class="row">
+            <div class="product__discount__slider owl-carousel">
+               {% for discounted_product in discounted_products %}
+               <div class="col-lg-4">
+                  <div class="product__discount__item">
+                     <div class="product__discount__item__pic set-bg"
+                        data-setbg="{{ discounted_product.product_image }}">
+                        <div class="product__discount__percent">-{{ discounted_product.discount }}%</div>
+                     </div>
+                     <div class="product__discount__item__text">
+                        <span>{{ discounted_product.category }}</span>
+                        <h5><a href="{% url 'shop_details' id=discounted_product.id %}">{{ discounted_product.name }}</a></h5>
+                        <div class="product__item__price">
+                           ${{ discounted_product.discounted_price }}
+                           <span>${{ discounted_product.price }}</span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               {% endfor %}
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="filter__item">
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-5 text-center"> <!-- Center the content in the first column -->
+            <div class="filter__sort">
+                <span>Sort By</span>
+                <select>
+                    <option value="0">Default</option>
+                    <option value="0">Default</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-5 text-center"> <!-- Center the content in the second column -->
+            <div class="filter__found">
+                <h6><span>{{ not_discounted_products.count }}</span> Products found</h6>
+            </div>
+        </div>
+    </div>
+</div>
+   <div class="row">
+      {% for product in not_discounted_products %}
+      <div class="col-lg-4 col-md-6 col-sm-6">
+         <div class="product__item">
+            <div class="product__item__pic">
+               <img src="{{ product.product_image }}" alt="{{ product.name }}">
+            </div>
+            <div class="product__item__text">
+               <h6><a href="{% url 'shop_details' id=product.id %}">{{ product.name }}</a></h6>
+               <h5>${{ product.price }}</h5>
+            </div>
+         </div>
+      </div>
+      {% endfor %}
+   </div>
+</section>
+<!-- Product Section End -->
+{% endblock %}
