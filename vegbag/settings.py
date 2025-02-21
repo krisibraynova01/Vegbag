@@ -88,7 +88,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'vegbag',
         'USER': 'postgres',
-        'PASSWORD': '27061kB*',
         'HOST': 'localhost',
         'PORT': '5432'
     }
